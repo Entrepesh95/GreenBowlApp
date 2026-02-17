@@ -1,0 +1,183 @@
+﻿@model GreenBowlApp.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold">Hello, @User.Identity?.Name!</h2>
+        <p class="text-muted">welcome to the Green Bowl inventory</p>
+    </div>
+    <div>
+        <span class="badge bg-light text-dark p-2">
+            <i class="bi bi-calendar me-1"></i> @DateTime.Now.ToString("dddd, MMMM dd, yyyy")
+        </span>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    <!-- ingedients card -->
+    <div class="col-md-3">
+        <div class="card dashboard-card p-3 position-relative">
+            @* fake numbers were given as part of test will need to implement real to calculate real percentage *@
+            <span class="badge bg-light text-success percent-badge">+12%</span> 
+
+            <div class="d-flex align-items-center">
+                <div class="icon-circle bg-success me-3">
+                    <i class="bi bi-box-seam text-white"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Total Ingredients</small>
+                    <h4 class="mb-0 fw-bold">@Model.TotalIngredients</h4> @* calling the model from DashboardViewModel*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products card -->
+    <div class="col-md-3">
+        <div class="card dashboard-card p-3 position-relative">
+            <span class="badge bg-light text-primary percent-badge">+8%</span>
+            <div class="d-flex align-items-center">
+                <div class="icon-circle bg-primary me-3">
+                    <i class="bi bi-box text-white"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Products</small>
+                    <h4 class="mb-0 fw-bold">@Model.TotalProducts</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- batches card -->
+    <div class="col-md-3">
+        <div class="card dashboard-card p-3 position-relative">
+            <span class="badge bg-light text-purple percent-badge">+23%</span>
+            <div class="d-flex align-items-center">
+                <div class="icon-circle bg-purple me-3">
+                    <i class="bi bi-gear text-white"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Total Batches</small>
+                    <h4 class="mb-0 fw-bold">@Model.TotalBatches</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low Stock  card-->
+    <div class="col-md-3">
+        <div class="card dashboard-card p-3 position-relative">
+            <span class="badge bg-light text-danger percent-badge">-5%</span>
+            <div class="d-flex align-items-center">
+                <div class="icon-circle bg-danger me-3">
+                    <i class="bi bi-exclamation-triangle text-white"></i>
+                </div>
+                <div>
+                    <small class="text-muted">Low Stock Items</small>
+                    <h4 class="mb-0 fw-bold">@Model.LowStockItems</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr />
+<!-- Charts cards-->
+<div class="row g-4 mt-4">
+
+    <!-- bar chart-->
+    <div class="col-md-8">
+        <div class="card dashboard-card p-4">
+            <h5 class="fw-bold mb-3">Ingredients: Used vs Available</h5>
+            <div class="chart-container">
+                <canvas id="ingredientsBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- Pie Chart-->
+<div class="row g-4 mt-4">
+    
+    <div class="col-md-12">
+        <div class="card dashboard-card p-4">
+            <h5 class="fw-bold mb-3">All Ingredients Available - Distribution</h5>
+            <div class="d-flex justify-content-center">
+                <div style="max-width: 520px; width:100%;">
+                    <canvas id="ingredientsPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+ @* Converting Razor model lists into JS arrays so we are able to obtain the data inside the pie chartJs *@
+@section Scripts {
+    <script>
+        
+        const ingredientLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.IngredientNames));
+        const availableData    = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AvailableAmounts));
+        const usedData         = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.UsedAmounts));
+
+        
+        const barCtx = document.getElementById('ingredientsBarChart');
+
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ingredientLabels,
+                datasets: [
+                    {
+                        label: 'Available',
+                        data: availableData,
+                        backgroundColor: '#16a34a', 
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Used',
+                        data: usedData,
+                        backgroundColor: '#ef4444', 
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        
+        const pieCtx = document.getElementById('ingredientsPieChart');
+
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ingredientLabels,
+                datasets: [{
+                    data: availableData
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+}

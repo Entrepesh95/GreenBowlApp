@@ -1,0 +1,82 @@
+﻿@model GreenBowlApp.Models.Product
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h2 class="fw-bold mb-1">Products available</h2>
+        <p class="text-muted mb-0">Manage and track product batches</p>
+    </div>
+
+    <a class="btn btn-success px-4 py-2 rounded-pill shadow-sm" asp-action="Create">
+        <i class="bi bi-box-seam me-2"></i> Add Product
+    </a>
+</div>
+
+<div class="card dashboard-card p-3 mb-3">
+    <div class="input-group">
+        <span class="input-group-text bg-white border-0">
+            <i class="bi bi-search text-muted"></i>
+        </span>
+        <input id="productSearch" type="text" class="form-control border-0"
+               placeholder="Search product..." />
+    </div>
+</div>
+
+<!-- Product Cards Row -->
+<div class="row g-4" id="productsGrid">
+    @foreach (var p in Model.Products)
+    {
+        var isActive = p.ProductId == Model.SelectedProductId;
+
+        <div class="col-md-3 product-card-col" data-name="@p.ProductName.ToLower()">
+            <a class="product-card @(isActive ? "product-card-active" : "")"
+               href="/Products?selectedId=@p.ProductId">
+
+                <div class="product-icon">
+                    <i class="bi bi-box"></i>
+                </div>
+
+                <div class="product-name">@p.ProductName</div>
+
+                <div class="product-stats">
+                    <div class="stat">
+                        <div class="stat-num">@p.BatchCount</div>
+                        <div class="stat-label">total Batches</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="stat">
+                        <div class="stat-num">@p.PouchCount</div>
+                        <div class="stat-label">toal Pouches</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<!-- Batches Container to display infor from podruct -->
+<div class="card dashboard-card p-4 mt-4">
+    <h5 class="fw-bold mb-3">@Model.SelectedProductName Batches</h5>
+
+    <div class="text-center text-muted py-5">
+        batches made in tottal = 10
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // a JS script function to perform a search
+        const search = document.getElementById("productSearch");
+        const cards = document.querySelectorAll(".product-card-col");
+
+        search.addEventListener("keyup", function () {
+            const q = search.value.toLowerCase().trim();
+            cards.forEach(c => {
+                const name = c.getAttribute("data-name");
+                c.style.display = name.includes(q) ? "" : "none";
+            });
+        });
+    </script>
+}

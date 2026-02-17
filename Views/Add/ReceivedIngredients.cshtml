@@ -1,0 +1,65 @@
+﻿@model List<GreenBowlApp.Models.ViewModels.ReceivedIngredientModel>
+@{
+    ViewData["Title"] = "Received Ingredients";
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h4 class="fw-bold mb-1">Received Ingredients</h4>
+        <div class="text-muted">received ingredients forms submitted</div>
+    </div>
+
+    <a href="/Add/ReceivedIngredientCreateForm" class="btn btn-success rounded-pill px-4">
+        <i class="bi bi-plus-lg me-2"></i> Add Received Item
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+<!-- received ingredient tablem -->
+<div class="card dashboard-card p-3">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Received Ingredient ID</th>
+                    <th>Ingredient Name</th>
+                    <th>Supplier Name</th>
+                    <th>Expiry Date</th>
+                    <th>Qty</th>
+                    <th>Unit in KG</th>
+                    <th>Damaged Bag</th>
+                    <th>Shipping Company</th>
+                    <th>Received By</th>
+                    <th>Date Received</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var x in Model)
+                {
+                    <tr>
+                        <td>@x.ReceivedId</td>
+                        <td>@x.IngredientName</td>
+                        <td>@x.SupplierName</td>
+                        <td>@(x.ExpiryDate?.ToString("yyyy-MM-dd") ?? "")</td>
+                        <td>@(x.Quantity?.ToString() ?? "")</td>
+                        <td>@(x.UnitKg?.ToString() ?? "")</td>
+                        <td>@(x.DamagedBags?.ToString() ?? "")</td>
+                        <td>@x.ShippingCompany</td>
+                        <td>@x.StaffEmployeeId</td>
+                        <td>@(x.DateReceived?.ToString("yyyy-MM-dd") ?? "")</td>
+                        <td class="text-end">
+                            <span class="text-muted">Edit/Delete later</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

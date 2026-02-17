@@ -1,0 +1,102 @@
+﻿@model GreenBowlApp.Models.ViewModels.PreEquipmentModel
+@{
+    ViewData["Title"] = "Pre-Op Form Equipment";
+}
+
+<div class="mb-3">
+    <h4 class="fw-bold">Pre-Op Form Equipment</h4>
+    <div class="text-muted">equipment form</div>
+</div>
+
+<!-- equiplemtn form -->
+<div class="card dashboard-card p-4">
+    <form asp-action="PreEquipment" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <label class="form-label">Batch</label>
+                <select asp-for="BatchId" class="form-select form-select-lg">
+                    <option value="">Select batch</option>
+                    @foreach (var b in Model.Batches)
+                    {
+                        <option value="@b.BatchId">@b.Label</option>
+                    }
+                </select>
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.BatchId)</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Employee</label>
+                <select asp-for="EmployeeId" class="form-select form-select-lg">
+                    <option value="0">Select employee</option>
+                    @foreach (var e in Model.Employees)
+                    {
+                        <option value="@e.EmployeeId">@e.Name</option>
+                    }
+                </select>
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.EmployeeId)</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Date</label>
+                <input asp-for="Date" type="date" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6"></div>
+
+            <div class="col-md-6">
+                <label class="form-label">Start Time</label>
+                <input asp-for="StartTime" type="time" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Finish Time</label>
+                <input asp-for="FinishTime" type="time" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Equipment Name</label>
+                <input asp-for="EquipmentName" class="form-control form-control-lg" placeholder="e.g. Mixer / Scale / Autoclave" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Packaging Machine</label>
+                <input asp-for="PackagingMachine" class="form-control form-control-lg" placeholder="e.g. Machine A" />
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Condition of Equipment</label>
+                <input asp-for="ConditionOfEquipment" class="form-control form-control-lg" placeholder="e.g. Clean, no damage, operating normally" />
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Action Taken</label>
+                <input asp-for="ActionTaken" class="form-control form-control-lg" placeholder="e.g. Cleaned, replaced part, re-tested" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Gluten Test</label>
+                <select asp-for="GlutenTest" class="form-select form-select-lg">
+                    <option value="Pass">Pass</option>
+                    <option value="Fail">Fail</option>
+                    <option value="N/A">N/A</option>
+                </select>
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.GlutenTest)</div>
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Comments</label>
+                <textarea asp-for="Comments" rows="4" class="form-control"></textarea>
+            </div>
+
+        </div>
+
+        <!-- submit form -->
+        <div class="d-flex justify-content-between mt-4">
+            <a class="btn btn-outline-secondary rounded-pill px-4" href="/Add/Index">Back</a>
+            <button type="submit" class="btn btn-success rounded-pill px-4">Save</button>
+        </div>
+    </form>
+</div>

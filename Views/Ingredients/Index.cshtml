@@ -1,0 +1,131 @@
+﻿@model List<GreenBowlApp.Models.Ingredient>
+@{
+    ViewData["Title"] = "Ingredients";
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h2 class="fw-bold mb-1">Ingredients Inventory</h2>
+        <p class="text-muted mb-0">Track ingredient stock levels, usage, and details</p>
+    </div>
+
+    <a class="btn btn-success px-4 py-2 rounded-pill shadow-sm" href="/Ingredients/Create">
+        <i class="bi bi-plus-lg me-2"></i> Add Ingredient
+    </a>
+</div>
+
+@* search bar div *@
+<div class="card dashboard-card p-3 mb-3">
+    <div class="input-group">
+        <span class="input-group-text bg-white border-0">
+            <i class="bi bi-search text-muted"></i>
+        </span>
+        <input id="searchBox" type="text" class="form-control border-0"
+               placeholder="Search by name, ingredient ID, or lot number..." />
+    </div>
+</div>
+
+@*table container with attributes*@
+<div class="card dashboard-card p-0">
+    <div class="table-wrapper">
+        <table class="table ingredients-table mb-0" id="ingredientsTable">
+            <thead>
+                <tr>
+                    <th>Ingredient ID</th>
+                    <th>Ingredient Name</th>
+                    <th>Lot Number</th>
+                    <th>Qty</th>
+                    <th>Weight/Bag</th>
+                    <th>Unit</th>
+                    <th>Location</th>
+                    <th>Company Made</th>
+                    <th>Country Origin</th>
+                    <th>Expiry Date</th>
+                    <th>Amount Used</th>
+                    <th>Amount Remain</th>
+                    <th>Invoice No</th>
+                    <th>Date Received</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model)
+                {
+                    // ingredient label for ingredient
+                    var displayId = $"ING-{i.IngredientId:000}";
+                   
+                    var unit = "KG";
+
+                    //invoice label for each ingredient
+                    var invoice = $"INV-{i.IngredientId:0000}";
+
+                    var statusText = (i.AmountRemain ?? 0) > 0 ? "In Stock" : "Out";
+                    var statusClass = (i.AmountRemain ?? 0) > 0 ? "status-in" : "status-out";
+
+                    <tr>
+                        <td>@displayId</td>
+                        <td>@i.ItemName</td>
+                        <td>@i.LotNumber</td>
+                        <td>@(i.Quantity?.ToString() ?? "-")</td>
+                        <td>@(i.WeightPerBag?.ToString() ?? "-")</td>
+                        <td>@unit</td>
+                        <td>@i.Location</td>
+                        <td>@i.CompanyMade</td>
+                        <td>@i.CountryOrigin</td>
+                        <td>@(i.ExpiryDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                        <td>@(i.AmountUsed?.ToString() ?? "0")</td>
+                        <td>@(i.AmountRemain?.ToString() ?? "0")</td>
+                        <td>@invoice</td>
+                        <td>@(i.DateReceived?.ToString("yyyy-MM-dd") ?? "-")</td>
+                        <td>
+                            <span class="status-badge @statusClass">@statusText</span>
+                        </td>
+                        <td class="text-end">
+                            @*form to edite ingredient from table*@
+                            <a class="action-icon text-success me-3"
+                               asp-action="Edit"
+                               asp-route-id="@i.IngredientId"
+                               title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            @*form to delete ingredient from table*@
+                            <form asp-action="Delete"
+                                  asp-route-id="@i.IngredientId"
+                                  method="post"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Delete this ingredient?');">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn p-0 action-icon text-danger"
+                                        title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // a script used to add a search function in the table
+        const searchBox = document.getElementById("searchBox");
+        const table = document.getElementById("ingredientsTable");
+        const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+        searchBox.addEventListener("keyup", function () {
+            const q = searchBox.value.toLowerCase();
+
+            for (let r of rows) {
+                const text = r.innerText.toLowerCase();
+                r.style.display = text.includes(q) ? "" : "none";
+            }
+        });
+    </script>
+}

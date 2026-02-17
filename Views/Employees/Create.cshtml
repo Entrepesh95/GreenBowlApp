@@ -1,0 +1,60 @@
+﻿@model GreenBowlApp.Models.Staff
+@{
+    ViewData["Title"] = "Add Employee";
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h2 class="fw-bold mb-1">Add Employee</h2>
+        <p class="text-muted mb-0">Create a new staff member</p>
+    </div>
+
+    <a class="btn btn-light rounded-pill px-4" asp-action="Index">Back</a>
+</div>
+
+<div class="card dashboard-card p-4">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Employee ID (number)</label>
+                <input asp-for="EmployeeId" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">First Name</label>
+                <input asp-for="FullName" class="form-control" />
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.FullName)</div>
+            </div>
+
+            <div class="col-md-5">
+                <label class="form-label">Last Name</label>
+                <input asp-for="LastName" class="form-control" />
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.LastName)</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Password</label>
+                <input asp-for="Password" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Employee Role</label>
+                <input asp-for="EmployeeRole" class="form-control" placeholder="Manager / Production Worker / Quality Control" />
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-success rounded-pill px-4">
+                <i class="bi bi-check2 me-2"></i> Save Employee
+            </button>
+            <a asp-action="Index" class="btn btn-light rounded-pill px-4">Cancel</a>
+        </div>
+    </form>
+</div>

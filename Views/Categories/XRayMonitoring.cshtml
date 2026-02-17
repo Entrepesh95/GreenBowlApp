@@ -1,0 +1,51 @@
+﻿@model List<GreenBowlApp.Models.ViewModels.XRayModel>
+@{
+    ViewData["Title"] = "X-Ray Monitoring Forms";
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h4 class="fw-bold mb-1">X-Ray Monitoring Forms</h4>
+        <div class="text-muted">Submitted X-ray records</div>
+    </div>
+
+    <a href="/Add" class="btn btn-success rounded-pill px-4">
+        <i class="bi bi-plus-lg me-2"></i> Add New Xray form
+    </a>
+</div>
+
+@*table for xray forms*@
+<div class="card dashboard-card p-3">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Xray ID</th>
+                    <th>Batch ID</th>
+                    <th>Employee</th>
+                    <th>Date</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Correction Action</th>
+                    <th>Comments</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var x in Model)
+                {
+                    <tr>
+                        <td>@x.XrayId</td>
+                        <td>@x.BatchId</td>
+                        <td>@(string.IsNullOrWhiteSpace(x.EmployeeName) ? x.EmployeeId.ToString() : x.EmployeeName)</td>
+                        <td>@(x.Date?.ToString("yyyy-MM-dd") ?? "")</td>
+                        <td>@(x.StartTime ?? "")</td>
+                        <td>@(x.EndTime ?? "")</td>
+                        <td>@x.CorrectionAction</td>
+                        <td>@x.Comments</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@model GreenBowlApp.Models.ViewModels.ReceivedIngredientModel
+@{
+    ViewData["Title"] = "Add Received Ingredient";
+}
+
+<div class="mb-3">
+    <h4 class="fw-bold">Add Received Ingredient</h4>
+    <div class="text-muted">Recieved ingredient form</div>
+</div>
+
+<!-- recieved ingredient form -->
+<div class="card dashboard-card p-4">
+    <form asp-action="ReceivedIngredientCreateForm" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Ingredient Name</label>
+                <input asp-for="IngredientName" class="form-control form-control-lg" />
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.IngredientName)</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Supplier Name</label>
+                <input asp-for="SupplierName" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Expiry Date</label>
+                <input asp-for="ExpiryDate" type="date" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Qty</label>
+                <input asp-for="Quantity" type="number" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Unit in KG</label>
+                <input asp-for="UnitKg" type="number" step="0.01" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Damaged Bag</label>
+                <input asp-for="DamagedBags" type="number" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-9">
+                <label class="form-label">Shipping Company</label>
+                <input asp-for="ShippingCompany" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Received By</label>
+                <select asp-for="StaffEmployeeId" class="form-select form-select-lg">
+                    <option value="0">Select employee</option>
+                    @foreach (var e in Model.Employees)
+                    {
+                        <option value="@e.EmployeeId">@e.Name</option>
+                    }
+                </select>
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.StaffEmployeeId)</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Date Received</label>
+                <input asp-for="DateReceived" type="date" class="form-control form-control-lg" />
+            </div>
+        </div>
+
+        <!-- submit button form -->
+        <div class="d-flex justify-content-between mt-4">
+            <a class="btn btn-outline-secondary rounded-pill px-4" href="/Add/Index">Back</a>
+            <button type="submit" class="btn btn-success rounded-pill px-4">Save</button>
+        </div>
+    </form>
+</div>

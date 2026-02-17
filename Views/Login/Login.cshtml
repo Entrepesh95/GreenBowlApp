@@ -1,0 +1,82 @@
+﻿@model GreenBowlApp.Models.Staff
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Login - GreenBowl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+@*login oage*@
+<body class="login-bg">
+
+    <div class="login-wrap">
+        <div class="login-card">
+
+            <div class="text-center mb-3">
+                <div class="login-badge">GB</div>
+                <h3 class="fw-bold mb-1">Green Bowl</h3>
+                <div class="text-muted"> Production Inventory System</div>
+            </div>
+
+            @*login form*@
+            <form method="post" asp-action="Login">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-white"><i class="bi bi-envelope"></i></span>
+                        <input asp-for="Email" class="form-control" placeholder="you@company.com" />
+                    </div>
+                    <div class="text-danger small">@Html.ValidationMessageFor(m => m.Email)</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-white"><i class="bi bi-lock"></i></span>
+                        <input asp-for="Password" class="form-control" type="password" placeholder="••••••••" />
+                    </div>
+                    <div class="text-danger small">@Html.ValidationMessageFor(m => m.Password)</div>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Error))
+                {
+                    <div class="alert alert-danger py-2">@Model.Error</div>
+                }
+
+                <button class="btn btn-success btn-lg w-100 rounded-pill mt-2" type="submit">
+                    Sign in
+                </button>
+            </form>
+
+            @*this can be deleetd as this is just to keep details available for testing*@
+            <div class="demo-box mt-3">
+                <div class="fw-semibold mb-2">Demo Accounts:</div>
+                <div class="demo-row">
+                    <span class="badge bg-light text-dark">Manager:</span>
+                    <span class="text-muted">manager@foodprod.com</span>
+                </div>
+                <div class="demo-row">
+                    <span class="badge bg-light text-dark">Employee:</span>
+                    <span class="text-muted">employee@foodprod.com</span>
+                </div>
+                <div class="text-muted small mt-2">
+                    Password for both: <span class="fw-semibold">manager123 / employee123</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

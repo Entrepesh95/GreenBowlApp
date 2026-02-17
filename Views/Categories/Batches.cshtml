@@ -1,0 +1,53 @@
+﻿@model List<GreenBowlApp.Models.ViewModels.BatchControlModel>
+@{
+    ViewData["Title"] = "Batches";
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h4 class="fw-bold mb-1">Batches</h4>
+        <div class="text-muted">All created production batches</div>
+    </div>
+
+    <a href="/Add" class="btn btn-success rounded-pill px-4">
+        <i class="bi bi-plus-lg me-2"></i> Create New Batch
+    </a>
+</div>
+
+@*table to display the batch forms*@
+<div class="card dashboard-card p-3">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Batch ID</th>
+                    <th>Batch No</th>
+                    <th>Production Date</th>
+                    <th>Start</th>
+                    <th>Finish</th>
+                    <th>Effective Date</th>
+                    <th>Batch Weight</th>
+                    <th>Supervisor</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr>
+                        <td>@b.BatchId</td>
+                        <td>@b.BatchNo</td>
+                        <td>@(b.ProductionDate?.ToString("yyyy-MM-dd") ?? "")</td>
+                        <td>@(b.StartTime ?? "")</td>
+                        <td>@(b.FinishTime ?? "")</td>
+                        <td>@(b.EffectiveDate?.ToString("yyyy-MM-dd") ?? "")</td>
+                        <td>@(b.BatchWeight?.ToString() ?? "")</td>
+                        <td>@(string.IsNullOrWhiteSpace(b.SupervisorName) ? b.SupervisorEmployeeId.ToString() : b.SupervisorName)</td>
+                        <td>@b.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

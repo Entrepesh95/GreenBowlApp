@@ -1,0 +1,94 @@
+﻿@model GreenBowlApp.Models.ViewModels.BatchProcessingModel
+@{
+    ViewData["Title"] = "Processing";
+}
+
+<!-- menu stepss -->
+<div class="wizard-steps mb-4">
+    <div class="step done"><span>1</span> Batch Control</div>
+    <div class="step done"><span>2</span> Packaging</div>
+    <div class="step active"><span>3</span> Processing</div>
+    <div class="step"><span>4</span> X-Ray</div>
+</div>
+
+<div class="mb-3">
+    <h4 class="fw-bold">@Model.ProductName - Batch Creation</h4>
+    <div class="text-muted">Step 3 of 4</div>
+</div>
+
+<!-- processing form -->
+<div class="card dashboard-card p-4">
+    <h5 class="fw-bold mb-4">Batching Control Processing</h5>
+
+    <form asp-action="Processing" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="BatchId" />
+        <input type="hidden" asp-for="ProductId" />
+        <input type="hidden" asp-for="ProductName" />
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Employee Name</label>
+                <select asp-for="EmployeeId" class="form-select form-select-lg">
+                    <option value="0">Select employee</option>
+                    @foreach (var e in Model.Employees)
+                    {
+                        <option value="@e.EmployeeId">@e.Name</option>
+                    }
+                </select>
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.EmployeeId)</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Production Date</label>
+                <input asp-for="ProductionDate" type="date" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Start Time</label>
+                <input asp-for="StartTime" type="time" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Finish Time</label>
+                <input asp-for="FinishTime" type="time" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Alarm Released Autoclave</label>
+                <input asp-for="AlarmAutoclave" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Time Checked</label>
+                <input asp-for="TimeChecked" type="time" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Reason Comment</label>
+                <input asp-for="ReasonComment" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Action Taken Comment</label>
+                <input asp-for="ActionTakenComment" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Comments</label>
+                <textarea asp-for="Comments" rows="4" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <!-- submit form -->
+        <div class="d-flex justify-content-between mt-4">
+            <a class="btn btn-outline-secondary rounded-pill px-4"
+               href="/Add/Packaging?batchId=@Model.BatchId&productId=@Model.ProductId">Back</a>
+
+            <button type="submit" class="btn btn-success rounded-pill px-4">
+                Next <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+        </div>
+    </form>
+</div>

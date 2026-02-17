@@ -1,0 +1,88 @@
+﻿@model GreenBowlApp.Models.ViewModels.XRayModel
+@{
+    ViewData["Title"] = "X-Ray";
+}
+
+<!-- menu steps -->
+<div class="wizard-steps mb-4">
+    <div class="step done"><span>1</span> Batch Control</div>
+    <div class="step done"><span>2</span> Packaging</div>
+    <div class="step done"><span>3</span> Processing</div>
+    <div class="step active"><span>4</span> X-Ray</div>
+</div>
+
+<div class="mb-3">
+    <h4 class="fw-bold">@Model.ProductName - Batch Creation</h4>
+    <div class="text-muted">Step 4 of 4</div>
+</div>
+
+<!-- pxray form -->
+<div class="card dashboard-card p-4">
+    <h5 class="fw-bold mb-4">X-Ray Monitoring Record</h5>
+
+    <form asp-action="XRay" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="BatchId" />
+        <input type="hidden" asp-for="ProductId" />
+        <input type="hidden" asp-for="ProductName" />
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Employee Name</label>
+                <select asp-for="EmployeeId" class="form-select form-select-lg">
+                    <option value="0">Select employee</option>
+                    @foreach (var e in Model.Employees)
+                    {
+                        <option value="@e.EmployeeId">@e.Name</option>
+                    }
+                </select>
+                <div class="text-danger small">@Html.ValidationMessageFor(m => m.EmployeeId)</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Date</label>
+                <input asp-for="Date" type="date" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Start Time</label>
+                <input asp-for="StartTime" type="time" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">End Time</label>
+                <input asp-for="EndTime" type="time" class="form-control form-control-lg" />
+            </div>
+
+            <div class="col-md-6 d-flex align-items-center gap-2 mt-2">
+                <input asp-for="Rejected" type="checkbox" class="form-check-input" id="rej" />
+                <label class="form-check-label" for="rej">Rejected</label>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Number of Pouches Rejected</label>
+                <input asp-for="RejectedPouches" type="number" class="form-control form-control-lg" value="0" />
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Correction Action</label>
+                <textarea asp-for="CorrectionAction" rows="3" class="form-control"></textarea>
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Comments</label>
+                <textarea asp-for="Comments" rows="3" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a class="btn btn-outline-secondary rounded-pill px-4"
+               href="/Add/Processing?batchId=@Model.BatchId&productId=@Model.ProductId">Back</a>
+
+            <button type="submit" class="btn btn-success rounded-pill px-4">
+                Complete &amp; Save All Forms
+            </button>
+        </div>
+    </form>
+</div>
